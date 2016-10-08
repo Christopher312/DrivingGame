@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+	<body>
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script>
+    	var data;
+		var firebase = new Firebase("https://flickering-inferno-9890.firebaseio.com/");
+		firebase.once('value', function(snapshot) {
+			data = snapshot.val();
+			//console.log(snapshot.val());
+			//alert(data);
+			var names = [];
+			for(var key in data) {
+				names.push(data[key].Username)
+			}
+			//console.log(names);
+			var nameSelect = document.getElementById("nameSelect")
+			nameSelect.size=names.length;
+			for(var i=0;i<names.length;i++) {
+				var option = document.createElement("option");
+				option.text=names[i];
+				option.value=names[i];
+				nameSelect.add(option);
+			}
+		})
+
+		function createNewUser() {
+			var name = document.getElementById("newUser").value;
+			//var score = 500;
+			//var minutes = 1200;
+			var speed = [250, 1200];
+			var accel = [250, 10];
+			var turn = [250, 10];
+			var rain = [50, 30];
+			var seatbelt = [50, 10];
+			var total = [200, 1200];
+			firebase.child(name).set({Username:name,Speed:speed,Accel:accel,Turn:turn,Rain:rain,Seatbelt:seatbelt,Total:total});
+		}
+		/*var config = {
+			apiKey: "<API_KEY",
+			authDomain: ".drivinggamesa.firebaseapp.com",
+			databaseURL: "https://drivinggamesa.firebaseio.com/"
+		}
+		var firebase = new Firebase()
+		firebase.initializeApp(config);
+		var database = firebase.database();
+		database().ref('1/Minutes').once("value")*/
+	</script>
+	This is text.
+	<select id="nameSelect"></select>
+	<br>
+	For new user:
+	<input type="text" id="newUser">
+	<button type="button" id="newUserButton" onClick=createNewUser()>Create New User</button>
+	</body>
+</html>
