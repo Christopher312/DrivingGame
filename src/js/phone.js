@@ -1,0 +1,1 @@
+gm.phone=function(){function n(n,e,o){return gm.communication.dialPhoneNumber(n,e,o)}function e(n,e,o){return gm.communication.sendTextMessage(n,e,o)}return{dialPhoneNumber:n,sendTextMessage:e}}();
