@@ -217,6 +217,18 @@
             });
           </script>
         </p>
+		<button id = "btn">Rain Safety Score</button>
+		<script>
+		$(function(){
+		     $('#btn').click(function() {
+			      gm.info.getVehicleData(shout, ['rainscore'});
+		     });
+	    });
+		</script>
+		<p>
+		Your Rain Safety Score is: <b id="rainscore"></b>
+		</p>
+		
       </div>
     </div>
 

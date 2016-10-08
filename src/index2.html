@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello World</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!-- Base css, but you'll likely want to keep them -->
+    <link rel="stylesheet" href="css/reset.css" type="text/css">
+
+    <!-- Your custom files -->
+    <link rel="stylesheet" href="css/app.css" type="text/css">
+    <script src="GMLIB/info.js"></script>
+    <script src="GMLIB/system.js"></script>
+    <script src = "js/jquery-3.1.1.js"></script>
+    <script>
+	  var isRain = false;
+	  var startRainTime = 0;
+	  var d = new Date();
+	  function rainSafety(data){
+	  if(data.wipers_on == true && data.light_level == 1){}
+	  }
+	  
+      function shout(data){
+        //alert(data.average_speed);
+        $("#speed").html(data.average_speed);
+        //will do stuff eventually
+      }
+      
+      var id = gm.info.watchVehicleData(updateSpeed, ['average_speed']);
+
+      function updateSpeed(data){
+        $("#speed").html(data.average_speed);
+      }
+    </script>
+    <!-- Uncomment libraries as you need them: -->
+    <!-- <script src="GMLIB/comm.js"></script> -->
+    <!--<script src="js/io.js"></script> -->
+    <!-- <script src="GMLIB/media.js"></script> -->
+    <!-- <script src="GMLIB/monitor.js"></script> -->
+    <!-- <script src="GMLIB/nav.js"></script> -->
+    <!-- <script src="GMLIB/phone.js"></script> -->
+    <!-- <script src="GMLIB/ui.js"></script> -->
+    <!-- <script src="GMLIB/util.js"></script> -->
+    <!-- <script src="GMLIB/voice.js"></script> -->
+
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="close"><img src="images/close.png" onclick="gm.system.closeApp()" alt="close"></div>
+      <div id="main">
+
+        <!-- Remove all code inside #main and add your own! -->
+        <h1>Hello Chris and Jessica</h1>
+        <p>
+          Your VIN is: <span id="vin">VEHICLE </span>
+        </p>
+        <button id="btn">What is my speed?</button>
+        <script>
+        $(function(){
+            $('#btn').click(function() {
+                gm.info.getVehicleData(shout, ['average_speed']);
+            });
+        });
+        </script>
+        <p>
+          Your speed is: <b id = "speed"></b>
+        </p>
+		<button id = "startrain">Start Rain</button>
+		<script>
+		$(function(){
+		     $('#startrain').click(function() {
+			      isRain = true;
+				  startRainTime = d.getTime();
+				  window.setInterval(function(){
+				       gm.info.getVehicleData(rainSafety, ['wipers_on', 'light_level']);
+					   }, 90000
+					   );
+				  
+		     });
+	    });
+		</script>
+		<button id = "stoprain">Stop Rain</button>
+		<script>
+		$(function(){
+		     $('#stoprain').click(function() {
+			      isRain = false;
+		     });
+	    });
+		</script>
+		
+		<p>
+		Your Rain Safety Score is: <b id="rainscore"></b>
+		</p>
+		
+      </div>
+    </div>
+
+    <!-- Your app code: -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
