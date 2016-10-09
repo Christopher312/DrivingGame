@@ -12,20 +12,31 @@
     <script src="GMLIB/system.js"></script>
     <script src = "js/jquery-3.1.1.js"></script>
     <script>
-      var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
+     var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
+      var seatbeltWatch = gm.info.watchVehicleData(checkBelts, ['driver_seatbelt_fastened', 'passenger_seatbelt_fastened']); 
       var isDriving = false; //tells you if you are going to get values or not
-      var score = [0,[0,0],[0,0],[0,0]]; //this score will cumulate and there will be a final function that determines how much your rating increases
-      //score is defined to be [speed, acceleration, turning, rain]
-      handles = ['average_speed', 'speed_limit', 'accelerator_position', 'lat_accel'];
+      var score = [[0,0],[0,0],[0,0],[0,0], [0,0], [0,0]]; //this score will cumulate and there will be a final function that determines how much your rating increases
+      //score is defined to be [speed, acceleration, turning, rain, brake, seatbelt]
+      handles = ['average_speed', 'speed_limit', 'accelerator_position', 'lat_accel', 'brake_position'];
 
       var isRain = false;
       var startR;
       var startData;
+      var userName='John Hewitt'; //SET IT TO USERNAME!!!
+      var allData;
+      var userData;
+      var startTime;
+      var date1;
       //var d = new Date();
       function setup(){
+          date1 = new Date();
+          startTime = date1.getTime();
           startData = setInterval(function(){
           gm.info.getVehicleData(calc, handles);
         }, 500);
+          window.setTimeout(function(){
+            gm.info.getVehicleData(checkBelts, ['driver_seatbelt_fastened', 'passenger_seatbelt_fastened']);
+          },2000)
         //var t1 = setTimeout(, 500); //add to score every 500 ms
         //var t2 = gm.info.watchVehicleData(calcAccel, ['long_accel']);
         //var t3 = gm.info.watchVehicleData(calcTurn, ['lat_accel']);
