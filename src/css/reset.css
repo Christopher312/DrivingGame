@@ -174,6 +174,16 @@ h2{
 
 
 }
+.homescreenTitle{
+  font-family: Pacifico, Calibri Light, sans-serif;
+  font-size: 48pt;
+  font-style: normal;
+  text-align: center;
+  color: white;
+  padding: 40px 0px;
+}
+
+
 
 .main {
   display: flex;
@@ -188,6 +198,9 @@ h2{
 
 .interactions-container {
   width: 30%;
+  background-color: #EDDDDD;
+  height: 386px;
+
 }
 
 #totalScore{
@@ -264,7 +277,7 @@ h2{
 }
 
 .category2{
-  background-color: #03d5ff;
+  background-color: #1159A1;
 }
 
 .category3{
@@ -280,7 +293,7 @@ h2{
 }
 
 .category6{
-  background-color: #54caff;
+  background-color: #4BBFF2;
 }
 
 p{
@@ -489,8 +502,8 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   margin: 5em 5% 0px 5%;
   
   position: relative; 
-  top: 45%;
-  padding: 8px 4px;
+  top: 35%;
+  padding: 20px 4px;
   width: 90%;
 
   background: #b43;
@@ -521,10 +534,12 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   /*vertical-align: baseline;*/
   margin: 5em 5% 0px 5%;
   
+  
   position: relative; 
-  top: 55%;
-  padding: 8px 4px;
-  width: 90%;
+  top: 43%;
+  padding: 20px 35px;
+  min-width: 236px;
+  
   
   background: #684FBF;
   border: 2px solid #684FBF;
@@ -554,8 +569,8 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   margin: 5em 5% 0px 5%;
   
   position: relative; 
-  top: 45%;
-  padding: 8px 4px;
+  top: 24%;
+  padding: 20px 39px;
   width: 90%;
   
   background: #684FBF;
