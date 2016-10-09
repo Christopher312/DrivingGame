@@ -428,7 +428,7 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   display: inline-block;
   position: relative;
   padding-right: 0;
-  
+  font-size: 20px;
   transition: padding-right 0.5s;
 }
 
@@ -480,7 +480,7 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   margin: 5em 5% 0px 5%;
   
   position: relative; 
-  top: 50%;
+  top: 45%;
   padding: 8px 4px;
   width: 90%;
 
@@ -513,7 +513,7 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   margin: 5em 5% 0px 5%;
   
   position: relative; 
-  top: 50%;
+  top: 55%;
   padding: 8px 4px;
   width: 90%;
   
@@ -525,6 +525,38 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   transition: all 0.5s;
 }
 .button3:hover, .button3:active 
+{
+  text-decoration: none;
+  color: #fff;
+  border-color: #cc33ff;
+  background: #cc33ff;
+}
+ .button4
+{
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #fff;
+
+  font-size: 16px;
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
+  /*vertical-align: baseline;*/
+  margin: 5em 5% 0px 5%;
+  
+  position: relative; 
+  top: 45%;
+  padding: 8px 4px;
+  width: 90%;
+  
+  background: #9933ff;
+  border: 2px solid #9933ff;
+  color: #FFF;
+  overflow: hidden;
+  
+  transition: all 0.5s;
+}
+.button4:hover, .button4:active 
 {
   text-decoration: none;
   color: #fff;

@@ -8,11 +8,12 @@
 		<link rel="stylesheet" href="css/app.css" type="text/css">
 		<style>
 			.styled-select {
-				height:210px;
+				height: 170px;
 				width: 450px;
 			}
 			option{
-				font-size:70px;
+				font-family: Calibri Light, Calibri, sans-serif;
+				font-size:45px;
 			}
 		</style>
 	</head>
@@ -55,6 +56,8 @@
 			var total = [200, 1200];
 			var brake = [300, 50];
 			firebase.child(name).set({Username:name,Speed:speed,Accel:accel,Turn:turn,Rain:rain,Seatbelt:seatbelt,Brake:brake,Total:total});
+			localStorage.setItem("username", name);
+			window.location.href="index3.html";
 		}
 
 		function continueOn() {
@@ -62,18 +65,63 @@
 			window.location.href="index3.html";
 		}
 	</script>
+	<style>
+		.titleUser{
+			font-family: Calibri Light, Calibri, sans-serif;
+			font-size: 50px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 10px;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		 .button5
+		{
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		text-align: center;
+		color: #fff;
 
+		font-size: 16px;
+		font-family: "Nunito", sans-serif;
+		font-weight: 300;
+		/*vertical-align: baseline;*/
+		/*margin: 15em 0 5em 0;*/
+		
+		position: relative;
+		padding: 8px 4px;
+		width: 300px;
+		
+		background: #9933ff;
+		border: 2px solid #9933ff;
+		color: #FFF;
+		overflow: hidden;
+		
+		transition: all 0.5s;
+		}
+		.button5:hover, .button5:active 
+		{
+		text-decoration: none;
+		color: #fff;
+		border-color: #cc33ff;
+		background: #cc33ff;
+		}
+	</style>
 	<center>
-	<h1>Select User</h1>
-	<select class = "styled-select" id="nameSelect">
+	<h1 class = 'titleUser'>Select User</h1>
+	<select class = "styled-select" id="nameSelect" style="margin-bottom: 20px;">
 	</select>
+	<div style="">
+	<a class="button5" id="continueButton" onClick="continueOn()">Continue</a>
+	</div>
 	<br>
-	<button type="button" id="continueButton" onClick="continueOn()">Continue</button>
+	<span style='font-family: Calibri Light, Calibri, sans-serif;
+			font-size: 25px;'> Or create a new user: </span>
+	<input type="text" id="newUser" style="height: 30px; width: 200px; line-width: 20px; margin-bottom: 10px;">
 	<br>
-	Or create a new user:
-	<input type="text" id="newUser">
-	<br>
-	<button type="button" id="newUserButton" onClick=createNewUser()>Create New User</button>
+	<div>
+	<button type="button" class="button5" id="newUserButton" onClick=createNewUser()>Create New User</button>
+	</div>
 	</center>
 	</body>
 </html>

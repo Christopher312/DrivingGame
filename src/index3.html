@@ -23,7 +23,7 @@
       var isRain = false;
       var startR;
       var startData;
-      var userName='Chris'; //SET IT TO USERNAME!!!
+      var userName=localStorage.getItem('username'); //SET IT TO USERNAME!!!
       var allData;
       var userData;
       var startTime;
@@ -133,7 +133,7 @@
         if(data.wipers_on == true && data.light_level == 1){
           score[3][0]+=1000;
         }
-        $('#rainScore').html(score[3][0]);
+        //$('#rainScore').html(score[3][0]);
       }
       function shout(data){
         //alert(data.average_speed);
@@ -165,8 +165,8 @@
         timeBasedIDs = ['#speedScore', '#accelScore', '#turnScore'];
         var keyT;
         for(i=0; i<score.length; i++){
-          score[i][0] = 60*score[i][0];
-          score[i][1] = 60*score[i][1];
+          score[i][0] = 10*score[i][0];
+          score[i][1] = 10*score[i][1];
         }
         var sum1 = 0
         for (i = 0; i < timeBased.length; i++) {
@@ -203,7 +203,7 @@
          isRain = true;
         startR = setInterval(function(){
             gm.info.getVehicleData(rainSafety, ['wipers_on', 'light_level']);
-          }, 30000);
+          }, 3000);
       }
       function stopRain(){
         gm.info.clearVehicleData(['wipers_on', 'light_level']);
@@ -276,6 +276,9 @@
           </div>
       </div>
       <div class = "interactions-container">
+        <a href="menu.html" class="button4">
+          Switch User
+        </a>
         <a href="highscore.html" class="button3">
           Leaderboard
         </a>
