@@ -165,12 +165,14 @@ h1 {
 }
 
 h2{
-  font-family: Calibri Light, Calibri, sans-serif;
-  font-size: 40px;
+  font-family: Pacifico, Calibri Light, Calibri, sans-serif;
+  font-size: 45px;
   font-style: normal;
   font-weight: 500;
   line-height: 23px;
   text-align: center;
+
+
 }
 
 .main {
@@ -180,7 +182,7 @@ h2{
 
 .score-container {
   width: 70%;
-  height: 224px;
+  height: 226px;
   position: relative;
 }
 
@@ -189,7 +191,9 @@ h2{
 }
 
 #totalScore{
-  font-size: 50pt;
+  font-size: 90pt;
+  font-family: Josefin Slab, Calibri Light, sans-serif;
+
 
 }
 
@@ -199,7 +203,7 @@ h2{
   
 }
 .scoreNumber{
-  font-family: Calibri Light, Calibri, sans-serif;
+  font-family: Josefin Slab, Calibri Light, Calibri, sans-serif;
   font-size: 150px;
   font-style: normal;
   font-weight: 500;
@@ -209,7 +213,8 @@ h2{
 
 .total-card{
   height: 100%;
-  padding: 24px 0px;
+  padding: 26px 0px;
+  max-width: 546px;
   background-color: #4cb5f5;
   color: white;
   background-size: cover;
@@ -234,28 +239,32 @@ h2{
 .category4,
 .category5,
 .category6 {
-  padding: 8px 0px;
+  padding: 5px 0px;
+  float: left;
   display: inline-block;
-  width: 50%;
-  font-family: Calibri Light, Calibri, sans-serif;
+  width: 270px;
+  font-family: Josefin Slab, Calibri Light, Calibri, sans-serif;
   font-size: 20px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   line-height: 23px;
   text-align: center;
   color: white;
   transition: background-color  .1s;
-  border: 10px;
-  border-color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: white;
+ 
+ 
 }
 
 .category1{
   background-color: #004d7f;
-  border-color: #fff;
+ 
 }
 
 .category2{
-  background-color: #08d5ff;
+  background-color: #03d5ff;
 }
 
 .category3{
@@ -517,8 +526,8 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   padding: 8px 4px;
   width: 90%;
   
-  background: #9933ff;
-  border: 2px solid #9933ff;
+  background: #684FBF;
+  border: 2px solid #684FBF;
   color: #FFF;
   overflow: hidden;
   
@@ -528,8 +537,8 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
 {
   text-decoration: none;
   color: #fff;
-  border-color: #cc33ff;
-  background: #cc33ff;
+  border-color: #4E3B8F;
+  background: #4E3B8F;
 }
  .button4
 {
@@ -549,8 +558,8 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   padding: 8px 4px;
   width: 90%;
   
-  background: #9933ff;
-  border: 2px solid #9933ff;
+  background: #684FBF;
+  border: 2px solid #684FBF;
   color: #FFF;
   overflow: hidden;
   
@@ -560,6 +569,6 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
 {
   text-decoration: none;
   color: #fff;
-  border-color: #cc33ff;
-  background: #cc33ff;
+  border-color: #4E3B8F;
+  background: #4E3B8F;
 }
