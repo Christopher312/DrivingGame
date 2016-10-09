@@ -587,3 +587,38 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   border-color: #4E3B8F;
   background: #4E3B8F;
 }
+
+ .button6
+{
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #fff;
+
+  font-size: 16px;
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
+  /*vertical-align: baseline;*/
+  margin: 5em 5% 0px 5%;
+  
+  
+  position: relative; 
+  top: 43%;
+  padding: 10px 10px;
+  min-width: 236px;
+  
+  
+  background: #684FBF;
+  border: 2px solid #684FBF;
+  color: #FFF;
+  overflow: hidden;
+  
+  transition: all 0.5s;
+}
+.button6:hover, .button6:active 
+{
+  text-decoration: none;
+  color: #fff;
+  border-color: #4E3B8F;
+  background: #4E3B8F;
+}
