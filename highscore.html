@@ -1,0 +1,29 @@
+<html>
+<head>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+<script>
+
+    var firebase =  new Firebase('https://flickering-inferno-9890.firebaseio.com/');//for tracking high scores
+    firebase.once('value', function(snapshot) {
+        var data = snapshot.val();
+        var sortable = [];
+        for(var key in data) {
+        	sortable.push([key, (data[key].Total)[0]]);
+        }
+        sortable.sort(function(a,b) {
+        	return b[1]-a[1];
+        });
+        var output = "";
+        for(var i=0;i<10 && i<sortable.length;i++)
+        	if(sortable[i]!=null)
+        		output += (i+1) + ". " + sortable[i][0] + ": " + sortable[i][1] + "<br>";
+        document.getElementById("scores").innerHTML=output
+    });
+ </script>
+ </head>
+ <body>
+ <h1>High Scores</h1>
+ <div id="scores"></div>
+ </body>
+ </html>
