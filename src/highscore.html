@@ -1,6 +1,10 @@
 <html>
 <head>
+<link rel="stylesheet" href="css/reset.css" type="text/css">
+<link rel="stylesheet" href="css/app.css" type="text/css">
 <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<script src="GMLIB/info.js"></script>
+<script src="GMLIB/system.js"></script>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 <script>
 
@@ -15,15 +19,81 @@
         	return b[1]-a[1];
         });
         var output = "";
-        for(var i=0;i<10 && i<sortable.length;i++)
+        for(var i=0;i<7 && i<sortable.length;i++)
         	if(sortable[i]!=null)
         		output += (i+1) + ". " + sortable[i][0] + ": " + sortable[i][1] + "<br>";
         document.getElementById("scores").innerHTML=output
     });
  </script>
+ <style>
+     .hs{
+        font-family: Calibri Light, Calibri, sans-serif;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 23px;
+        text-align: center;
+     }
+     .scor{
+        font-family: Calibri Light, Calibri, sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 23px;
+        text-align: center;
+        line-height: 30px;
+     }
+      .button4
+    {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #fff;
+
+    font-size: 16px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 300;
+    /*vertical-align: baseline;*/
+    margin: 5em 5% 0px 5%;
+    
+    /*position: absolute; 
+    top: 50%;
+    float: right, bottom;
+    padding: 8px 4px;*/
+    width: 90%;
+    
+    background: #9933ff;
+    border: 2px solid #9933ff;
+    color: #FFF;
+    overflow: hidden;
+    
+    transition: all 0.5s;
+    }
+    .button4:hover, .button4:active 
+    {
+  text-decoration: none;
+  color: #fff;
+  border-color: #cc33ff;
+  background: #cc33ff;
+}
+    .buttondiv{
+        text-align:center;
+        bottom:0;
+        padding:20px;
+        position: fixed;
+        right:0;
+        bottom:0;
+        min-width:330px;
+    }
+</style>
  </head>
  <body>
- <h1>High Scores</h1>
- <div id="scores"></div>
+ <h1 class ="hs">High Scores</h1>
+ <div class = "scor" id="scores"></div>
+<div class='buttondiv'>
+ <a href="index3.html" class="button3">
+          Return to Dashboard
+        </a>
+</div>
  </body>
  </html>
