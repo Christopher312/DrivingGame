@@ -4,7 +4,7 @@
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 <script>
 
-    var firebase =  new Firebase('https://flickering-inferno-9890.firebaseio.com/');//for tracking high scores
+    var firebase =  new Firebase('https://drivinggame.firebaseio.com/');//for tracking high scores
     firebase.once('value', function(snapshot) {
         var data = snapshot.val();
         var sortable = [];
