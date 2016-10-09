@@ -178,6 +178,7 @@
         }
 
         onceBased = ["Rain",'Brake','Seatbelt'];
+        onceBasedIDs = ['#rainScore','#brakeScore','#seatbeltScore'];
         var keyO;
         for (i = 0; i < onceBased.length; i++) {
             keyO = onceBased[i];  
@@ -185,6 +186,7 @@
             userData[keyO][0] = (userData[keyO][0]*userData[keyO][1]+score[i+3][0])/(userData[keyO][1]+score[i+3][1]);
             userData[keyO][1] += score[i+3][1];
             sum1 += userData[keyO][0]/3;
+            $(onceBasedIDs[i]).html(Math.round(userData[keyO][0]/3));
         }
         userData['Total'][0] = Math.round(sum1);
         $('#totalScore').html(userData['Total'][0]);
@@ -193,29 +195,11 @@
         score = [[0,0],[0,0],[0,0],[0,0],[0,0], [0,0]];
         });        
       }
-      /*
-      function updateVals(data){
-        if(isDriving==true){
-          s = data.average_speed;
-          a = data.lat_accel;
-          if(s!=null){
-            $("#speed").html(Math.round(0.621371*s)+" mph");
-          }
-          if(a!=null){
-            $("#acc").html(data.accelerator_position+" %");
-          }
-        }
-        else{
-          $("#speed").html("Not Driving");
-          $("#acc").html("Not Driving");
-        }
-      }
-      */
       function startRain(){
          isRain = true;
         startR = setInterval(function(){
             gm.info.getVehicleData(rainSafety, ['wipers_on', 'light_level']);
-          }, 900);
+          }, 30000);
       }
       function stopRain(){
         gm.info.clearVehicleData(['wipers_on', 'light_level']);
@@ -236,8 +220,6 @@
 
   </head>
   <body>
-      
-         
   <script>
         $(function(){
             $('#start').ready(function() {
@@ -248,45 +230,49 @@
             });
         });
         </script>
-    <div id="wrapper">
+      <div id="wrapper">
       <div id="close"><img src="images/close.png" onclick="gm.system.closeApp()" alt="close"></div>
-      <div id="main">
-
-        <!-- Remove all code inside #main and add your own! -->
-        <h2> Your Score: <b id='totalScore'></b>
-        </h2>
-      <!-- <p>
-          Speed: <i id = "speed">Not Driving</i>
-        </p>
-        <p>
-          Acceleration: <i id = "acc">Not Driving</i>
-        </p> -->
-        <category1>
-          Speed Score: <i id = "speedScore">Not Driving</i>
-        </category1>
-        <category2>
-          Accel Score: <i id = "accelScore">Not Driving</i>
-        </category2>
-        <category3>
-          Turn Score: <i id = "turnScore">Not Driving</i>
-        </category3>
-      
-        <p>
-        <button id="stop">Stop Driving</button>
+      <div id="main" class="main">
+        <div class='score-container'>
+          <div class='total-card'>
+              <h2> Your Score:</h2>
+              <div id = "totalScore">0</div>
+          </div>
+          <div class="component-cards">
+              <div class = 'category1'>
+                  Speed Score: <i id = "speedScore">Not Driving</i>
+              </div>
+              <div class = 'category2'>
+                  Accel Score: <i id = "accelScore">Not Driving</i>
+              </div>
+              <div class ='category3'>
+                  Turn Score: <i id = "turnScore">Not Driving</i>
+              </div>
+              <div class='category4'>
+                  Rain Score: <i id = "rainScore"> Not Driving</i>
+              </div>
+              <div class = 'category5'>
+                  Brake Score: <i id="brakeScore">Not Driving</i>
+              </div>
+              <div class = 'category6'>
+                  Seatbelt Score: <i id="seatbeltScore">Not Driving</i>
+              </div>
+          </div>
+      </div>
+      <div class = "interactions-container">
+        <button id="stop" class="button2">Stop Driving</button>
+      </div>
         <script>
         $(function(){
             $('#stop').click(function() {
                 isDriving = false;
                 close();
                 $("#speed").html("Not Driving");
-                //clear
             });
         });
         </script>
-        </p>
       </div>
     </div>
-
     <!-- Your app code: -->
     <script src="js/app.js"></script>
   </body>

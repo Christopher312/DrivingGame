@@ -4,6 +4,10 @@ body {
   background-color: #fff;
 }
 
+* {
+  font-size: 12px;
+}
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 
 /**
@@ -169,7 +173,32 @@ h2{
   text-align: center;
 }
 
-scoreNumber{
+.main {
+  display: flex;
+  width: 100%;
+}
+
+.score-container {
+  width: 70%;
+  height: 224px;
+  position: relative;
+}
+
+.interactions-container {
+  width: 30%;
+}
+
+#totalScore{
+  font-size: 50pt;
+
+}
+
+.stop{
+  font-family: Calibri Light, Calibri, sans-serif;
+  font-size: 60px;
+  
+}
+.scoreNumber{
   font-family: Calibri Light, Calibri, sans-serif;
   font-size: 150px;
   font-style: normal;
@@ -177,32 +206,72 @@ scoreNumber{
   line-height: 23px;
   text-align: center;
 }
-category1{
-  font-family: Calibri Light, Calibri, sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 23px;
-  text-align: left;
+
+.total-card{
+  height: 100%;
+  padding: 24px 0px;
+  background-color: #4cb5f5;
+  color: white;
+  background-size: cover;
+  background-position: center top;
+  background-image: url("");
 }
 
-category2{
+.component-cards {
+  position: absolute;
+  bottom: 100;
+  left: 0;
+  font-size: 0px;
+}
+
+.component-cards i {
+  font-size: 14pt;
+}
+
+.category1, 
+.category2,
+.category3,
+.category4,
+.category5,
+.category6 {
+  padding: 8px 0px;
+  display: inline-block;
+  width: 50%;
   font-family: Calibri Light, Calibri, sans-serif;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: 23px;
   text-align: center;
-  
+  color: white;
+  transition: background-color  .1s;
+  border: 10px;
+  border-color: #fff;
 }
 
-category3{
-  font-family: Calibri Light, Calibri, sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 23px;
-  text-align: right;
+.category1{
+  background-color: #004d7f;
+  border-color: #fff;
+}
+
+.category2{
+  background-color: #08d5ff;
+}
+
+.category3{
+  background-color: #009bff;
+}
+
+.category4{
+  background-color: #2a5e7f;
+}
+
+.category5{
+  background-color: #007ccc;
+}
+
+.category6{
+  background-color: #54caff;
 }
 p{
   font-family: Calibri Light, Calibri, sans-serif;
@@ -396,4 +465,35 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   top: 50%;
 }
  
+ .button2
+{
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #fff;
 
+  font-size: 16px;
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
+  vertical-align: baseline;
+  margin: 5em 5% 0px 5%;
+  
+  position: relative; 
+  top: 50%;
+  padding: 8px 0;
+  width: 90%;
+
+  background: #b43;
+  border: 2px solid #b43;
+  color: #FFF;
+  overflow: hidden;
+  
+  transition: all 0.5s;
+}
+.button2:hover, .button2:active 
+{
+  text-decoration: none;
+  color: #fff;
+  border-color: #e12;
+  background: #e12;
+}
