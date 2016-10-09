@@ -46,6 +46,7 @@
         calcSpeed(data.average_speed, data.speed_limit);
         calcAccel(data.accelerator_position);
         calcTurn(data.lat_accel);        
+        calcBrake(data.brake_position);
         $("#speedScore").html(score[0]);
         $("#accelScore").html(score[1][0]);
         $("#turnScore").html(score[2][0]);
@@ -53,18 +54,19 @@
       function calcSpeed(s, l){
         s = s*0.621371;
         l = l*0.621371;
+        score[0][1]+=500;
         if(s<l-10){
           //nothing
+          score[0][1]-=500;
         }
         else if(s<l+5){
-          score[0]+=1000;
+          score[0][0]+=8.333;
         }
         else{
-          1000-50*(s-l-5)
+          (1000-50*(s-l-5))/120
         }
       }
       function calcAccel(i){
-        //a = Math.abs(i);
         a = i;
         score[1][1]+=500;
         if(a<15){//1.34112){ //3 mph/s
@@ -72,7 +74,7 @@
           score[1][1]-=500;
         }
         else if(a<50){//3.12928){// 7 mph/s
-          score[1][0] += 1000;
+          score[1][0] += 8.333;
         }
         //else if(a<4.91744){
         //  score[1][0] += 1000-312.799*(a-3.12928);
@@ -83,21 +85,42 @@
       }
       function calcTurn(i){
         //convert to g
-        i = Math.abs(9.81*i);
+        i = Math.abs(i/9.81);
         score[2][1] += 500; //500 ms to the time
         if(i<0.5){
           //nothing
           score[2][1] -= 500;
         }
         else if(i<1.5){
-          score[2][0]+=1000;
+          score[2][0]+=8.333;
         }
         else if(i<3){
-          1000-17.342*(i-1.5)*(i-1.5)*(1.5)
+          (1000-17.342*(i-1.5)*(i-1.5)*(1.5))/120
         }
         else{
           //nothing in score directly but with cost of time
         }
+      }
+      function calcBrake(i){
+        score[4][1]+=1;
+        if(i<60){
+          score[4][0]+=1000;
+        }
+        else{
+          //do nothing, denominator suffers
+        }
+      }
+      function checkBelts(data){
+          score[5][1]+=1;
+          if(data.driver_seatbelt_fastened ==true) {
+              score[5][0]+=500;
+          }
+          if (data.passenger_seatbelt_fastened==true){
+              score[5][0]+=500;
+          }
+          else{
+              //YOU SUFFER, WEAR YOUR SEATBELT
+          }
       }
       function rainSafety(data){
         score[3][1]+=1;
