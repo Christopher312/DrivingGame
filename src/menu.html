@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Menu</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="css/reset.css" type="text/css">
+		<link rel="stylesheet" href="css/app.css" type="text/css">
+		<style>
+			.styled-select {
+				height:210px;
+				width: 450px;
+			}
+			option{
+				font-size:70px;
+			}
+		</style>
+	</head>
+	<body>
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script>
+    	var data;
+		var firebase = new Firebase("https://drivinggame.firebaseio.com//");
+		firebase.once('value', function(snapshot) {
+			data = snapshot.val();
+			//console.log(snapshot.val());
+			//alert(data);
+			var names = [];
+			for(var key in data) {
+				names.push(data[key].Username)
+			}
+			//console.log(names);
+			var nameSelect = document.getElementById("nameSelect")
+			nameSelect.size=names.length;
+			for(var i=0;i<names.length;i++) {
+				var option = document.createElement("option");
+				option.text=names[i];
+				option.value=names[i];
+				option.class=
+				nameSelect.add(option);
+
+			}
+		})
+
+		function createNewUser() {
+			var name = document.getElementById("newUser").value;
+			//var score = 500;
+			//var minutes = 1200;
+			var speed = [250, 1200];
+			var accel = [250, 10];
+			var turn = [250, 10];
+			var rain = [50, 30];
+			var seatbelt = [50, 10];
+			var total = [200, 1200];
+			var brake = [300, 50];
+			firebase.child(name).set({Username:name,Speed:speed,Accel:accel,Turn:turn,Rain:rain,Seatbelt:seatbelt,Brake:brake,Total:total});
+		}
+
+		function continueOn() {
+			localStorage.setItem("username", document.getElementById("nameSelect").value);
+			window.location.href="index3.html";
+		}
+	</script>
+
+	<center>
+	<h1>Select User</h1>
+	<select class = "styled-select" id="nameSelect">
+	</select>
+	<br>
+	<button type="button" id="continueButton" onClick="continueOn()">Continue</button>
+	<br>
+	Or create a new user:
+	<input type="text" id="newUser">
+	<br>
+	<button type="button" id="newUserButton" onClick=createNewUser()>Create New User</button>
+	</center>
+	</body>
+</html>
