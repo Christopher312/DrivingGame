@@ -210,6 +210,18 @@
         clearInterval(startR);
         isRain = false;
       }
+      function changeToStart(){
+        $('#stop').css(
+        {'background': '#0D6', 
+        'border': '1px solid #0D6'});
+        $('#stop').html('Start Driving');
+      }
+      function changeToStop(){
+        $('#stop').css(
+        {'background': '#b43', 
+        'border': '1px solid #b43'});
+        $('#stop').html('Stop Driving');
+      }
     </script>
     <!-- Uncomment libraries as you need them: -->
     <!-- <script src="GMLIB/comm.js"></script> -->
@@ -276,12 +288,14 @@
                 for(i=0; i<ar.length; i++){
                   $(ar[i]).html('Not Driving');
                 }
+                changeToStart();
                 //$("#speed").html("Not Driving");
               }
               else{
                 isDriving = true;
                 //gm.info.getVehicleData(shout, ["average_speed", "accelerator_position"]);
                 setup();
+                changeToStop();
               }
             });
         });
