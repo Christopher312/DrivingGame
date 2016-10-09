@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Joyride</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Base css, but you'll likely want to keep them -->
+    <link rel="stylesheet" href="css/reset.css" type="text/css">
+
+    <!-- Your custom files -->
+    <link rel="stylesheet" href="css/app.css" type="text/css">
+    <script src="GMLIB/info.js"></script>
+    <script src="GMLIB/system.js"></script>
+    <script src = "js/jquery-3.1.1.js"></script>
+    <script>
+      var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
+      var isDriving = false; //tells you if you are going to get values or not
+      var score = [0,[0,0],[0,0],[0,0]]; //this score will cumulate and there will be a final function that determines how much your rating increases
+      //score is defined to be [speed, acceleration, turning, rain]
+      handles = ['average_speed', 'speed_limit', 'accelerator_position', 'lat_accel'];
+
+      var isRain = false;
+      var startR;
+      var startData;
+      //var d = new Date();
+      function setup(){
+          startData = setInterval(function(){
+          gm.info.getVehicleData(calc, handles);
+        }, 500);
+        //var t1 = setTimeout(, 500); //add to score every 500 ms
+        //var t2 = gm.info.watchVehicleData(calcAccel, ['long_accel']);
+        //var t3 = gm.info.watchVehicleData(calcTurn, ['lat_accel']);
+      }
+      
+      function calc(data){
+        calcSpeed(data.average_speed, data.speed_limit);
+        calcAccel(data.accelerator_position);
+        calcTurn(data.lat_accel);        
+        $("#speedScore").html(score[0]);
+        $("#accelScore").html(score[1][0]);
+        $("#turnScore").html(score[2][0]);
+      }
+      function calcSpeed(s, l){
+        s = s*0.621371;
+        l = l*0.621371;
+        if(s<l-10){
+          //nothing
+        }
+        else if(s<l+5){
+          score[0]+=1000;
+        }
+        else{
+          1000-50*(s-l-5)
+        }
+      }
+      function calcAccel(i){
+        //a = Math.abs(i);
+        a = i;
+        score[1][1]+=500;
+        if(a<15){//1.34112){ //3 mph/s
+          //not doing anything, coasting, no penalization
+          score[1][1]-=500;
+        }
+        else if(a<50){//3.12928){// 7 mph/s
+          score[1][0] += 1000;
+        }
+        //else if(a<4.91744){
+        //  score[1][0] += 1000-312.799*(a-3.12928);
+        //}
+        else{
+          //not adding to score but denom increases
+        }
+      }
+      function calcTurn(i){
+        //convert to g
+        i = Math.abs(9.81*i);
+        score[2][1] += 500; //500 ms to the time
+        if(i<0.5){
+          //nothing
+          score[2][1] -= 500;
+        }
+        else if(i<1.5){
+          score[2][0]+=1000;
+        }
+        else if(i<3){
+          1000-17.342*(i-1.5)*(i-1.5)*(1.5)
+        }
+        else{
+          //nothing in score directly but with cost of time
+        }
+      }
+      function rainSafety(data){
+        score[3][1]+=1;
+        if(data.wipers_on == true && data.light_level == 1){
+          score[3][0]+=1000;
+        }
+        $('#rainScore').html(score[3][0]);
+      }
+      function shout(data){
+        //alert(data.average_speed);
+        $("#speed").html(Math.round(0.621371*data.average_speed)+" mph");
+        $("#acc").html(data.accelerator_position+" %");
+        $("#speedScore").html(score[0]);
+        $("#accelScore").html(score[1][0]);
+        $("#turnScore").html(score[2][0]);
+        //if(isRain==true){
+          $('#rainScore').html(score[3][0]);
+        //}
+      }
+      function close(){
+        //update score
+        //kill watchers
+        gm.info.clearVehicleData(handles); 
+        clearInterval(startData);
+      }
+      function updateVals(data){
+        if(isDriving==true){
+          s = data.average_speed;
+          a = data.lat_accel;
+          if(s!=null){
+            $("#speed").html(Math.round(0.621371*s)+" mph");
+          }
+          if(a!=null){
+            $("#acc").html(data.accelerator_position+" %");
+          }
+        }
+        else{
+          $("#speed").html("Not Driving");
+          $("#acc").html("Not Driving");
+        }
+      }
+      function startRain(){
+         isRain = true;
+        startR = setInterval(function(){
+            gm.info.getVehicleData(rainSafety, ['wipers_on', 'light_level']);
+          }, 900);
+      }
+      function stopRain(){
+        gm.info.clearVehicleData(['wipers_on', 'light_level']);
+        clearInterval(startR);
+        isRain = false;
+      }
+    </script>
+    <!-- Uncomment libraries as you need them: -->
+    <!-- <script src="GMLIB/comm.js"></script> -->
+    <!--<script src="js/io.js"></script> -->
+    <!-- <script src="GMLIB/media.js"></script> -->
+    <!-- <script src="GMLIB/monitor.js"></script> -->
+    <!-- <script src="GMLIB/nav.js"></script> -->
+    <!-- <script src="GMLIB/phone.js"></script> -->
+    <!-- <script src="GMLIB/ui.js"></script> -->
+    <!-- <script src="GMLIB/util.js"></script> -->
+    <!-- <script src="GMLIB/voice.js"></script> -->
+
+  </head>
+  <body>
+      
+         
+  <script>
+        $(function(){
+            $('#start').ready(function() {
+                isDriving = true;
+                gm.info.getVehicleData(shout, ["average_speed", "accelerator_position"]);
+                setup();
+                //gm.info.watchVehicleData(updateVals, ["average_speed", "lat_accel"]);
+            });
+        });
+        </script>
+    <div id="wrapper">
+      <div id="close"><img src="images/close.png" onclick="gm.system.closeApp()" alt="close"></div>
+      <div id="main">
+
+        <!-- Remove all code inside #main and add your own! -->
+        <h2> Your Score:
+        </h2>
+      <!-- <p>
+          Speed: <i id = "speed">Not Driving</i>
+        </p>
+        <p>
+          Acceleration: <i id = "acc">Not Driving</i>
+        </p> -->
+        <category1>
+          Speed Score: <i id = "speedScore">Not Driving</i>
+        </category1>
+        <category2>
+          Accel Score: <i id = "accelScore">Not Driving</i>
+        </category2>
+        <category3>
+          Turn Score: <i id = "turnScore">Not Driving</i>
+        </category3>
+      
+        <button id="stop">Stop Driving</button>
+        <script>
+        $(function(){
+            $('#stop').click(function() {
+                isDriving = false;
+                close();
+                $("#speed").html("Not Driving");
+                //clear
+            });
+        });
+        </script>
+      </div>
+    </div>
+
+    <!-- Your app code: -->
+    <script src="js/app.js"></script>
+  </body>
+</html>

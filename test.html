@@ -36,7 +36,8 @@
 			var rain = [50, 30];
 			var seatbelt = [50, 10];
 			var total = [200, 1200];
-			firebase.child(name).set({Username:name,Speed:speed,Accel:accel,Turn:turn,Rain:rain,Seatbelt:seatbelt,Total:total});
+			var brake = [250,50]
+			firebase.child(name).set({Username:name,Speed:speed,Accel:accel,Turn:turn,Rain:rain,Seatbelt:seatbelt,Brake:brake,Total:total});
 		}
 		/*var config = {
 			apiKey: "<API_KEY",

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Joyride</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Base css, but you'll likely want to keep them -->
+    <link rel="stylesheet" href="css/reset.css" type="text/css">
+
+    <!-- Your custom files -->
+    <link rel="stylesheet" href="css/app.css" type="text/css">
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src="GMLIB/info.js"></script>
+    <script src="GMLIB/system.js"></script>
+    <script src = "js/jquery-3.1.1.js"></script>
+    <script>
+      //var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
+      var seatbeltWatch = gm.info.watchVehicleData(checkBelts, ['driver_seatbelt_fastened', 'passenger_seatbelt_fastened']);
+      var brakeWatch = gm.info.watchVehicleData(calcBrake, ['brake_position']);
+      var isDriving = false; //tells you if you are going to get values or not
+      var score = [[0,0],[0,0],[0,0],[0,0], [0,0], [0,0]]; //this score will cumulate and there will be a final function that determines how much your rating increases
+      //score is defined to be [speed, acceleration, turning, rain, brake, seatbelt]
+      handles = ['average_speed', 'speed_limit', 'accelerator_position', 'lat_accel', 'brake_position','driver_seatbelt_fastened', 'passenger_seatbelt_fastened'];
+      intHandles = ['average_speed', 'speed_limit', 'accelerator_position', 'lat_accel']; 
+      var isRain = false;
+      var startR;
+      var startData;
+      var userName='Adam'; //SET IT TO USERNAME!!!
+      //var allData;
+      var startTime;
+      //var updateRunner;
+      var date1;
+      var firebase;
+      function setup(){
+          date1 = new Date();
+          startTime = date1.getTime();
+          startData = setInterval(function(){
+            gm.info.getVehicleData(calc, handles);
+          }, 500);
+          firebase = new Firebase("https://flickering-inferno-9890.firebaseio.com/");
+          /*updateRunner = setInterval(function(){
+            updateScore();
+          }, 1000);*/
+          window.setTimeout(function(){
+            gm.info.getVehicleData(checkBelts, ['driver_seatbelt_fastened', 'passenger_seatbelt_fastened']);
+          },2000)
+        //var t1 = setTimeout(, 500); //add to score every 500 ms
+        //var t2 = gm.info.watchVehicleData(calcAccel, ['long_accel']);
+        //var t3 = gm.info.watchVehicleData(calcTurn, ['lat_accel']);
+      }
+      function calc(data){
+        calcSpeed(data.average_speed, data.speed_limit);
+        calcAccel(data.accelerator_position);
+        calcTurn(data.lat_accel);
+        //calcBrake(data.brake_position);
+        //console.log("trying to update?");    
+        updateScore();
+        //$("#speedScore").html(score[0][0]);
+        //$("#accelScore").html(score[1][0]);
+        //$("#turnScore").html(score[2][0]);
+      }
+      function calcSpeed(s, l){
+        s = s*0.621371;
+        l = l*0.621371;
+        score[0][1]+=500;
+        if(s<l-10){
+          //nothing
+          score[0][1]-=500;
+        }
+        else if(s<l+5){
+          score[0][0]+=8.333;
+        }
+        else{
+          (1000-50*(s-l-5))/120
+        }
+      }
+      function calcAccel(i){
+        a = i;
+        score[1][1]+=500;
+        if(a<15){//1.34112){ //3 mph/s
+          //not doing anything, coasting, no penalization
+          score[1][1]-=500;
+        }
+        else if(a<50){//3.12928){// 7 mph/s
+          score[1][0] += 8.333;
+        }
+        else{
+          //not adding to score but denom increases
+        }
+      }
+      function calcTurn(i){
+        //convert to g
+        i = Math.abs(i/9.81);
+        score[2][1] += 500; //500 ms to the time
+        if(i<0.5){
+          //nothing
+          score[2][1] -= 500;
+        }
+        else if(i<1.5){
+          score[2][0]+=8.333;
+        }
+        else if(i<3){
+          (1000-17.342*(i-1.5)*(i-1.5)*(1.5))/120;
+        }
+        else{
+          //nothing in score directly but with cost of time
+        }
+      }
+       function calcBrake(data){
+         i = data.brake_position;
+        score[4][1]+=1;
+        if(i<60){
+          score[4][0]+=1000;
+        }
+        else{
+          //do nothing, denominator suffers
+        }
+      }
+      function checkBelts(data){
+          score[5][1]+=1;
+          if(data.driver_seatbelt_fastened ==true) {
+              score[5][0]+=500;
+          }
+          if (data.passenger_seatbelt_fastened==true){
+              score[5][0]+=500;
+          }
+          else{
+              //YOU SUFFER, WEAR YOUR SEATBELT
+          }
+      }
+      function rainSafety(data){
+        score[3][1]+=1;
+        if(data.wipers_on == true && data.light_level == 1){
+          score[3][0]+=1000;
+        }
+        $('#rainScore').html(score[3][0]);
+      }
+      function shout(data){
+        //$("#speedScore").html(score[0][0]);
+        //$("#accelScore").html(score[1][0]);
+        //$("#turnScore").html(score[2][0]);
+        //updateScore();
+      }
+      function close(){
+        gm.info.clearVehicleData(handles); //kill watchers 
+        clearInterval(startData); //stop functions
+        //clearInterval(updateRunner);
+        if(isRain==true){ //so the rain stuff stops
+          clearInterval(startR);
+        }
+        uploadData(); //update score
+        alert('SUCCESSFULLY UPDATED AND CLOSED.')
+      }
+      function updateScore(){
+        //firebase = new Firebase("https://flickering-inferno-9890.firebaseio.com/");
+        //  firebase.once('value',function(snapshot){
+        //    userData = snapshot.val()[userName];
+        //  });
+        var userData;
+        firebase.once('value', function(snapshot) {
+          console.log("update score.");
+            //allData = snapshot.val();
+            //console.log(snapshot.val()['Adam']);
+           userData = snapshot.val()[userName];
+            console.log(userData);
+        for(i=0; i<score.length; i++){ //multipler to make simulator faster
+          score[i][0] = 600*score[i][0];
+          score[i][1] = 600*score[i][1];
+        }
+        timeBased = ['Speed','Accel','Turn'];
+        timeBasedIDs = ['#speedScore', '#accelScore', '#turnScore'];
+        var keyT;
+        var sum1 = 0
+        for (i = 0; i < timeBased.length; i++) {
+            keyT = timeBased[i];  
+            userData[keyT][0] = (userData[keyT][0]*userData[keyT][1]+score[i][0])/(userData[keyT][1]+score[i][1]/60000);
+            userData[keyT][1] += score[i][1]/60000;
+            sum1 += userData[keyT][0];
+            //console.log("updating "+timeBasedIDs[i]);
+            $(timeBasedIDs[i]).html(Math.round(userData[keyT][0]));
+        }
+        onceBased = ["Rain",'Brake','Seatbelt'];
+        var keyO;
+        for (i = 0; i < onceBased.length; i++) {
+            keyO = onceBased[i];  
+            //console.log(keyO);
+            userData[keyO][0] = (userData[keyO][0]*userData[keyO][1]+score[i+3][0])/(userData[keyO][1]+score[i+3][1]);
+            userData[keyO][1] += score[i+3][1];
+            sum1 += userData[keyO][0]/3;
+        }
+        userData['Total'][0] = Math.round(sum1);
+        $('#total').html(userData['Total'][0]);
+        userData['Total'][1] += (new Date().getTime()-startTime)/60000;
+        score = [[0,0],[0,0],[0,0],[0,0],[0,0], [0,0]]; //resets score so you don't double add
+        });        
+      }
+      function uploadData(){
+        firebase.child(userName).set(userData);
+      }
+      function startRain(){
+        isRain = true;
+        //startRainTime = d.getTime();
+        startR = setInterval(function(){
+            gm.info.getVehicleData(rainSafety, ['wipers_on', 'light_level']);
+          }, 900);
+      }
+      function stopRain(){
+        gm.info.clearVehicleData(['wipers_on', 'light_level']);
+        clearInterval(startR);
+        isRain = false;
+      }
+    </script>
+    <!-- Uncomment libraries as you need them: -->
+    <!-- <script src="GMLIB/comm.js"></script> -->
+    <!--<script src="js/io.js"></script> -->
+    <!-- <script src="GMLIB/media.js"></script> -->
+    <!-- <script src="GMLIB/monitor.js"></script> -->
+    <!-- <script src="GMLIB/nav.js"></script> -->
+    <!-- <script src="GMLIB/phone.js"></script> -->
+    <!-- <script src="GMLIB/ui.js"></script> -->
+    <!-- <script src="GMLIB/util.js"></script> -->
+    <!-- <script src="GMLIB/voice.js"></script> -->
+
+  </head>
+  <body>
+    <script>
+    $(function(){
+            $('#start').ready(function() {
+                isDriving = true;
+                setup();
+            });
+        });  
+    </script>
+    <div id="wrapper">
+      <div id="close"><img src="images/close.png" onclick="gm.system.closeApp()" alt="close"></div>
+      <div id="main">
+
+        <!-- Remove all code inside #main and add your own! -->
+        <!-- Your app code: -->
+        <script src="js/app.js"></script>
+
+        <h2> Your Score: <b id = 'total'></b></h2>
+        <category1>
+          Speed Score: <i id = "speedScore">Not Driving</i>
+        </category1>
+        <category2>
+          Accel Score: <i id = "accelScore">Not Driving</i>
+        </category2>
+        <category3>
+          Turn Score: <i id = "turnScore">Not Driving</i>
+        </category3>
+        
+        <button id="stop">I'm Done.</button>
+        <script>
+        $(function(){
+            $('#stop').click(function() {
+                isDriving = false;
+                close();
+                $("#speed").html("Not Driving");
+                //clear
+            });
+        });
+        </script>		
+      </div>
+    </div>
+
+    
+  </body>
+</html>
