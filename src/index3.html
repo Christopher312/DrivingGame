@@ -53,9 +53,9 @@
         calcAccel(data.accelerator_position);
         calcTurn(data.lat_accel);        
         calcBrake(data.brake_position);
-        $("#speedScore").html(score[0]);
-        $("#accelScore").html(score[1][0]);
-        $("#turnScore").html(score[2][0]);
+        //$("#speedScore").html(score[0]);
+        //$("#accelScore").html(score[1][0]);
+        //$("#turnScore").html(score[2][0]);
       }
       function calcSpeed(s, l){
         s = s*0.621371;
@@ -191,7 +191,6 @@
         userData['Total'][1] += (new Date().getTime()-startTime)/60000;
         firebase.child(userName).set(userData);
         score = [[0,0],[0,0],[0,0],[0,0],[0,0], [0,0]];
-        alert("SUCCESS UPDATED");
         });        
       }
       /*
