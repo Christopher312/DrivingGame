@@ -8,11 +8,12 @@
 
     <!-- Your custom files -->
     <link rel="stylesheet" href="css/app.css" type="text/css">
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
     <script src="GMLIB/info.js"></script>
     <script src="GMLIB/system.js"></script>
     <script src = "js/jquery-3.1.1.js"></script>
     <script>
-     var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
+      //var id = gm.info.watchVehicleData(updateVals, ["average_speed", 'accelerator_position']); //just for the speed/accelerometer
       var seatbeltWatch = gm.info.watchVehicleData(checkBelts, ['driver_seatbelt_fastened', 'passenger_seatbelt_fastened']); 
       var isDriving = false; //tells you if you are going to get values or not
       var score = [[0,0],[0,0],[0,0],[0,0], [0,0], [0,0]]; //this score will cumulate and there will be a final function that determines how much your rating increases
@@ -22,7 +23,7 @@
       var isRain = false;
       var startR;
       var startData;
-      var userName='John Hewitt'; //SET IT TO USERNAME!!!
+      var userName='Chris'; //SET IT TO USERNAME!!!
       var allData;
       var userData;
       var startTime;
@@ -131,13 +132,13 @@
       }
       function shout(data){
         //alert(data.average_speed);
-        $("#speed").html(Math.round(0.621371*data.average_speed)+" mph");
-        $("#acc").html(data.accelerator_position+" %");
-        $("#speedScore").html(score[0]);
+        //$("#speed").html(Math.round(0.621371*data.average_speed)+" mph");
+        //$("#acc").html(data.accelerator_position+" %");
+        $("#speedScore").html(score[0][0]);
         $("#accelScore").html(score[1][0]);
         $("#turnScore").html(score[2][0]);
         //if(isRain==true){
-          $('#rainScore').html(score[3][0]);
+        $('#rainScore').html(score[3][0]);
         //}
       }
       function close(){
@@ -145,7 +146,46 @@
         //kill watchers
         gm.info.clearVehicleData(handles); 
         clearInterval(startData);
+        updateScore();
       }
+      function updateScore(){
+        var firebase = new Firebase("https://drivinggame.firebaseio.com/");
+        firebase.once('value', function(snapshot){
+            //allData = snapshot.val();
+            //console.log(snapshot.val()['Adam']);
+            userData = snapshot.val()[userName];
+            console.log(userData);
+        
+        timeBased = ['Speed','Accel','Turn'];
+        var keyT;
+        for(i=0; i<score.length; i++){
+          score[i][0] = 60*score[i][0];
+          score[i][1] = 60*score[i][1];
+        }
+        var sum1 = 0
+        for (i = 0; i < timeBased.length; i++) {
+            keyT = timeBased[i];  
+            userData[keyT][0] = (userData[keyT][0]*userData[keyT][1]+score[i][0])/(userData[keyT][1]+score[i][1]/60000);
+            userData[keyT][1] += score[i][1]/60000;
+            sum1 += userData[keyT][0];
+        }
+
+        onceBased = ["Rain",'Brake','Seatbelt'];
+        var keyO;
+        for (i = 0; i < onceBased.length; i++) {
+            keyO = onceBased[i];  
+            //console.log(keyO);
+            userData[keyO][0] = (userData[keyO][0]*userData[keyO][1]+score[i+3][0])/(userData[keyO][1]+score[i+3][1]);
+            userData[keyO][1] += score[i+3][1];
+            sum1 += userData[keyO][0]/3;
+        }
+        userData['Total'][0] = Math.round(sum1);
+        userData['Total'][1] += (new Date().getTime()-startTime)/60000;
+        firebase.child(userName).set(userData);
+        alert("SUCCESS UPDATED");
+        });        
+      }
+      /*
       function updateVals(data){
         if(isDriving==true){
           s = data.average_speed;
@@ -162,6 +202,7 @@
           $("#acc").html("Not Driving");
         }
       }
+      */
       function startRain(){
          isRain = true;
         startR = setInterval(function(){
@@ -222,6 +263,7 @@
           Turn Score: <i id = "turnScore">Not Driving</i>
         </category3>
       
+        <p>
         <button id="stop">Stop Driving</button>
         <script>
         $(function(){
@@ -233,6 +275,7 @@
             });
         });
         </script>
+        </p>
       </div>
     </div>
 

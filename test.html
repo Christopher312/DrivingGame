@@ -6,7 +6,7 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
     <script>
     	var data;
-		var firebase = new Firebase("https://flickering-inferno-9890.firebaseio.com/");
+		var firebase = new Firebase("https://drivinggame.firebaseio.com/");
 		firebase.once('value', function(snapshot) {
 			data = snapshot.val();
 			//console.log(snapshot.val());
