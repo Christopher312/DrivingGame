@@ -139,7 +139,7 @@
         $("#accelScore").html(score[1][0]);
         $("#turnScore").html(score[2][0]);
         //if(isRain==true){
-          $('#rainScore').html(score[3][0]);
+        $('#rainScore').html(score[3][0]);
         //}
       }
       function close(){
@@ -154,7 +154,6 @@
       }
       function updateScore(){
         var firebase = new Firebase("https://flickering-inferno-9890.firebaseio.com/");
-        
         firebase.once('value',function(snapshot){
             //allData = snapshot.val();
             //console.log(snapshot.val()['Adam']);
