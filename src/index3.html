@@ -174,7 +174,9 @@
             userData[keyT][0] = (userData[keyT][0]*userData[keyT][1]+score[i][0])/(userData[keyT][1]+score[i][1]/60000);
             userData[keyT][1] += score[i][1]/60000;
             sum1 += userData[keyT][0];
-            $(timeBasedIDs[i]).html(Math.round(userData[keyT][0]));
+            if(isDriving){
+              $(timeBasedIDs[i]).html(Math.round(userData[keyT][0]));
+            }
         }
 
         onceBased = ["Rain",'Brake','Seatbelt'];
@@ -186,7 +188,9 @@
             userData[keyO][0] = (userData[keyO][0]*userData[keyO][1]+score[i+3][0])/(userData[keyO][1]+score[i+3][1]);
             userData[keyO][1] += score[i+3][1];
             sum1 += userData[keyO][0]/3;
-            $(onceBasedIDs[i]).html(Math.round(userData[keyO][0]/3));
+            if(isDriving){
+              $(onceBasedIDs[i]).html(Math.round(userData[keyO][0]/3));
+            }
         }
         userData['Total'][0] = Math.round(sum1);
         $('#totalScore').html(userData['Total'][0]);
@@ -224,7 +228,7 @@
         $(function(){
             $('#start').ready(function() {
                 isDriving = true;
-                gm.info.getVehicleData(shout, ["average_speed", "accelerator_position"]);
+                //gm.info.getVehicleData(shout, ["average_speed", "accelerator_position"]);
                 setup();
                 //gm.info.watchVehicleData(updateVals, ["average_speed", "lat_accel"]);
             });
@@ -265,9 +269,20 @@
         <script>
         $(function(){
             $('#stop').click(function() {
+              if(isDriving==true){
                 isDriving = false;
                 close();
-                $("#speed").html("Not Driving");
+                var ar = ['#speedScore', '#accelScore', '#turnScore','#rainScore','#brakeScore','#seatbeltScore'];
+                for(i=0; i<ar.length; i++){
+                  $(ar[i]).html('Not Driving');
+                }
+                //$("#speed").html("Not Driving");
+              }
+              else{
+                isDriving = true;
+                //gm.info.getVehicleData(shout, ["average_speed", "accelerator_position"]);
+                setup();
+              }
             });
         });
         </script>
